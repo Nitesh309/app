@@ -7,7 +7,7 @@ class LaundryServiceTest {
 
     @Test
     void testCalculateCost_validItem() {
-        LaundryService laundryService = new LaundryService();
+        LaundryService laundryService = new LaundryService()
         double cost = laundryService.calculateCost("shirt", 3);
         assertEquals(15.0, cost);
     }
