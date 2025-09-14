@@ -28,7 +28,7 @@ pipeline{
         }
         stage('Push to nexus'){
             steps {
-                dir('maven-app') {
+                //dir('maven-app') {
                     script {
                         withCredentials([usernamePassword(credentialsId: "${NEXUS_CREDENTIALS}", usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
                             sh """
@@ -41,7 +41,7 @@ pipeline{
                                 -Dversion=${ARTIFACT_VERSION} \
                                 -Dpackaging=jar 
                             """
-                        }
+                        //}
                     }
                 }
             }
