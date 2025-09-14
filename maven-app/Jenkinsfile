@@ -9,45 +9,12 @@ pipeline{
                 git branch: 'main', credentialsId: 'github-april-token', url: 'https://github.com/devopsdecode/april-2025.git'
             }
         }
-        stage('Stage2 Maven instations check'){
-            steps{
-                sh 'mvn --version'
-            }
-        }
-        stage('Stage3 Maven validation'){
-            steps{
-                dir ('maven-app'){
-                sh 'mvn validate'
+        stage('BUILD and Package'){
+            dir ('maven-app'){
+                steps{
+                    sh 'mvn package'
                 }
             }
-        }
-        stage('Stage4 Maven compile'){
-            steps{
-                dir ('maven-app'){
-                sh 'mvn clean compile'
-                }
-            }
-        }        
-        stage('Stage5 Maven test'){
-            steps{
-                dir ('maven-app'){
-                sh 'mvn test'
-                }
-            }
-        }    
-        stage('Stage6 Maven package'){
-            steps{
-                dir ('maven-app'){
-                sh 'mvn package'
-                }
-            }
-        }
-        stage('Stage6 Maven verify'){
-            steps{
-                dir ('maven-app'){
-                sh 'mvn verify'
-                }
-            }
-        }               
+        
     }
 }
