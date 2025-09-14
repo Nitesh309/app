@@ -40,7 +40,7 @@ pipeline{
                                 -DartifactId=${ARTIFACT_ID} \
                                 -Dversion=${ARTIFACT_VERSION} \
                                 -Dpackaging=jar  \
-                                --settings ./settings.xml
+                                --settings ./setting.xml
                             """
                         //}
                     }
