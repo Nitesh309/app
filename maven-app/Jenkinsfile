@@ -9,7 +9,7 @@ pipeline{
         ARTIFACT_GROUP = 'com.example.laundry'
         ARTIFACT_ID = 'LaundryApp'
         ARTIFACT_VERSION = '1.1.1'
-        ARTIFACT_FILE = 'maven-app/target/LaundryApp-1.0-SNAPSHOT.jar'
+        ARTIFACT_FILE = 'target/LaundryApp-1.0-SNAPSHOT.jar'
         NEXUS_CREDENTIALS = 'nexus'  // Ensure this is set in Jenkins credentials
     }
 
