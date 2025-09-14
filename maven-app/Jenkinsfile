@@ -39,7 +39,8 @@ pipeline{
                                 -DgroupId=${ARTIFACT_GROUP} \
                                 -DartifactId=${ARTIFACT_ID} \
                                 -Dversion=${ARTIFACT_VERSION} \
-                                -Dpackaging=jar 
+                                -Dpackaging=jar  \
+                                --settings ./settings.xml
                             """
                         //}
                     }
