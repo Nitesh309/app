@@ -6,7 +6,7 @@ pipeline{
     stages{
         stage('Stage1-clone-code'){
             steps{
-                git branch: 'main', credentialsId: '66453e59-5102-4d5d-bd0b-c6cf511b4445', url: 'https://github.com/devopsdecode/april-2025.git'
+                git branch: 'main', credentialsId: 'githubtoken', url: 'https://github.com/devopsdecode/april-2025.git'
             }
         }
         stage('Stage2 Maven instations check'){
