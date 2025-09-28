@@ -1,86 +1,3 @@
-// CD:
-
-// pipeline {
-//     agent any
-    
-//     environment {
-//         EC2_HOST = '13.235.243.213'
-//         EC2_USER = 'ubuntu'
-//         NEXUS_URL = 'http://nexus:8081'
-//         NEXUS_REPOSITORY = 'maven-releases'
-//         ARTIFACT_GROUP = 'com.example.laundry'
-//         ARTIFACT_ID = 'LaundryApp'
-//         ARTIFACT_VERSION = '1.1.1'
-//         JAR_NAME = 'LaundryApp-1.1.1.jar'
-//         SSH_HOME='/home/ubuntu'
-//     }
-    
-//     stages {
-//         stage('Test SSH Connection') {
-//             steps {
-//                 script {
-//                     sshagent(['mells-server']) {
-//                         sh """
-//                         ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${EC2_USER}@${EC2_HOST} '
-//                             echo "SSH connection successful!"
-//                             whoami
-//                             hostname
-//                             uptime
-//                         '
-//                         """
-//                     }
-//                 }
-//             }
-//         }
-//         stage('Installing Java & checking version') {
-//             steps {
-//                 script {
-//                     sshagent(['mells-server']) {
-//                         sh """
-//                         ssh ${EC2_USER}@${EC2_HOST} '
-//                             echo "SSH connection successful!"
-//                             dpkg -s openjdk-17-jdk &> /dev/null || sudo apt update && sudo apt install -y openjdk-17-jdk
-//                             java -version
-//                         '
-//                         """
-//                     }
-//                 }
-//             }
-//         }
-//         stage ('downloading jar') {
-//             steps {
-//                 sh 'curl -u admin:admin -O ${NEXUS_URL}/repository/maven-releases/com/example/laundry/LaundryApp/1.1.1/${JAR_NAME}'
-//                 sh 'ls -alth'
-//             }
-//         }
-//         stage('Sending files over scp') {
-//             steps {
-//                 script {
-//                     sshagent(['mells-server']) {
-//                         sh 'scp ./${JAR_NAME} ${EC2_USER}@${EC2_HOST}:${SSH_HOME}'
-//                     }
-//                 }
-//             }
-//         }
-//         stage('Running Java jar') {
-//             steps {
-//                 script {
-//                     sshagent(['mells-server']) {
-//                         sh """
-//                         ssh ${EC2_USER}@${EC2_HOST} '
-//                             echo "SSH connection successful!"
-//                             pwd
-//                             java -jar ${JAR_NAME}
-//                         '
-//                         """
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
-
-
 pipeline {
     agent any
     
@@ -104,18 +21,28 @@ pipeline {
             }
         }
         
-        stage('SSH to Remote Server') {
+        stage('Install Basic') {
             steps {
-                sshagent(credentials: ['cd-ec2-ssh']) {
+                sshagent(credentials: ['install-basic']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
-                            echo "Successfully connected to remote server"
-                            pwd
-                            ls -la
+                            echo "Installing basic requirements"
                             sudo apt update -y
                             sudo apt install openjdk-17-jre -y
                             sudo mkdir -p /apps/
                             sudo chown ubuntu:ubuntu /apps
+                        '
+                    """
+                }
+            }
+        }
+        
+        stage('Deploy Application') {
+            steps {
+                sshagent(credentials: ['Depoying-app']) {
+                    sh """
+                        scp -o StrictHostKeyChecking=no LaundryApp-1.1.1.jar ${REMOTE_USER}@${REMOTE_HOST}:/apps/
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
                             cd /apps
                             nohup java -jar LaundryApp-1.1.1.jar >> app.log 2>&1 &
                             echo "Application started in background"
