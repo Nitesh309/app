@@ -119,7 +119,7 @@ pipeline {
                             cd /apps
                             nohup java -jar LaundryApp-1.1.1.jar >> app.log 2>&1 &
                             echo "Application started in background"
-'                        '
+                        '
                     """
                 }
             }
