@@ -8,7 +8,7 @@ pipeline {
         
         // Nexus artifact details
         NEXUS_URL = 'http://nexus:8081'
-        ARTIFACT_PATH = 'maven-releases/com/example/laundry/LaundryApp/1.1.1/LaundryApp-1.1.1.jar'
+        ARTIFACT_PATH = 'maven-releases/com/example/laundry/LaundryApp/2.1.0/LaundryApp-2.1.0.jar'
     }
 
     stages {
@@ -16,7 +16,7 @@ pipeline {
             steps {
                 // Download artifact from Nexus to workspace
                 sh """
-                    curl -o LaundryApp-1.1.1.jar "${NEXUS_URL}/repository/${ARTIFACT_PATH}"
+                    curl -o LaundryApp-2.1.0.jar "${NEXUS_URL}/repository/${ARTIFACT_PATH}"
                 """
             }
         }
@@ -41,10 +41,10 @@ pipeline {
             steps {
                 sshagent(credentials: ['cd-ec2-ssh']) {
                     sh """
-                        scp -o StrictHostKeyChecking=no LaundryApp-1.1.1.jar ${REMOTE_USER}@${REMOTE_HOST}:/apps/
+                        scp -o StrictHostKeyChecking=no LaundryApp-2.1.0.jar ${REMOTE_USER}@${REMOTE_HOST}:/apps/
                         ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
                             cd /apps
-                            nohup java -jar LaundryApp-1.1.1.jar >> app.log 2>&1 &
+                            nohup java -jar LaundryApp-2.1.0.jar >> app.log 2>&1 &
                             echo "Application started in background"
                         '
                     """
