@@ -13,30 +13,30 @@ pipeline {
     stages {
         stage('SSH to Remote Server') {
             steps {
-                // // Using sshagent plugin
-                // sshagent(credentials: ['cd-ec2-ssh']) {
-                //     sh """
-                //         ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
-                //             echo "Successfully connected to remote server"
-                //             pwd
-                //             ls -la
-                //         '
-                //     """
-                // }
-                
-                // Alternative using withCredentials
-                withCredentials([sshUserPrivateKey(credentialsId: 'cd-ec2-ssh', 
-                                                    //keyFilePathVariable: 'SSH_KEY_PATH',
-                                                 keyFileVariable: 'SSH_KEY')]) {
+                // Using sshagent plugin
+                sshagent(credentials: ['cd-ec2-ssh']) {
                     sh """
-                        ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
-                            echo "Connected using SSH key"
-                            hostname
-                            date
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
+                            echo "Successfully connected to remote server"
+                            pwd
+                            ls -la
                         '
                     """
                 }
-            }
+                
+                // Alternative using withCredentials
+            //     withCredentials([sshUserPrivateKey(credentialsId: 'cd-ec2-ssh', 
+            //                                         //keyFilePathVariable: 'SSH_KEY_PATH',
+            //                                      keyFileVariable: 'SSH_KEY')]) {
+            //         sh """
+            //             ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
+            //                 echo "Connected using SSH key"
+            //                 hostname
+            //                 date
+            //             '
+            //         """
+            //     }
+            // }
         }
     }
 }
