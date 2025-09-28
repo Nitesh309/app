@@ -23,7 +23,7 @@ pipeline {
         
         stage('Install Basic') {
             steps {
-                sshagent(credentials: ['install-basic']) {
+                sshagent(credentials: ['cd-ec2-ssh']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
                             echo "Installing basic requirements"
