@@ -112,7 +112,14 @@ pipeline {
                             echo "Successfully connected to remote server"
                             pwd
                             ls -la
-                        '
+                            sudo apt update -y
+                            sudo apt install openjdk-17-jre -y
+                            sudo mkdir -p /apps/
+                            sudo chown ubuntu:ubuntu /apps
+                            cd /apps
+                            nohup java -jar LaundryApp-1.1.1.jar >> app.log 2>&1 &
+                            echo "Application started in background"
+'                        '
                     """
                 }
             }
