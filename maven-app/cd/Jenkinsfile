@@ -1,0 +1,81 @@
+CD:
+
+pipeline {
+    agent any
+    
+    environment {
+        EC2_HOST = '13.235.243.213'
+        EC2_USER = 'ubuntu'
+        NEXUS_URL = 'http://nexus:8081'
+        NEXUS_REPOSITORY = 'maven-releases'
+        ARTIFACT_GROUP = 'com.example.laundry'
+        ARTIFACT_ID = 'LaundryApp'
+        ARTIFACT_VERSION = '1.1.1'
+        JAR_NAME = 'LaundryApp-1.1.1.jar'
+        SSH_HOME='/home/ubuntu'
+    }
+    
+    stages {
+        stage('Test SSH Connection') {
+            steps {
+                script {
+                    sshagent(['mells-server']) {
+                        sh """
+                        ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${EC2_USER}@${EC2_HOST} '
+                            echo "SSH connection successful!"
+                            whoami
+                            hostname
+                            uptime
+                        '
+                        """
+                    }
+                }
+            }
+        }
+        stage('Installing Java & checking version') {
+            steps {
+                script {
+                    sshagent(['mells-server']) {
+                        sh """
+                        ssh ${EC2_USER}@${EC2_HOST} '
+                            echo "SSH connection successful!"
+                            dpkg -s openjdk-17-jdk &> /dev/null || sudo apt update && sudo apt install -y openjdk-17-jdk
+                            java -version
+                        '
+                        """
+                    }
+                }
+            }
+        }
+        stage ('downloading jar') {
+            steps {
+                sh 'curl -u admin:admin -O ${NEXUS_URL}/repository/maven-releases/com/example/laundry/LaundryApp/1.1.1/${JAR_NAME}'
+                sh 'ls -alth'
+            }
+        }
+        stage('Sending files over scp') {
+            steps {
+                script {
+                    sshagent(['mells-server']) {
+                        sh 'scp ./${JAR_NAME} ${EC2_USER}@${EC2_HOST}:${SSH_HOME}'
+                    }
+                }
+            }
+        }
+        stage('Running Java jar') {
+            steps {
+                script {
+                    sshagent(['mells-server']) {
+                        sh """
+                        ssh ${EC2_USER}@${EC2_HOST} '
+                            echo "SSH connection successful!"
+                            pwd
+                            java -jar ${JAR_NAME}
+                        '
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
