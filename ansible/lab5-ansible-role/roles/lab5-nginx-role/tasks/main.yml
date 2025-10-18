@@ -1,0 +1,16 @@
+  - name: apt update
+    apt:
+      update_cache: yes
+    become: yes
+
+  - name: Install Nginx
+    apt:
+      name: nginx
+      state: present
+      update_cache: yes
+
+  - name: Copy static website 
+    template:
+      src: index.html.j2
+      dest: /var/www/html/index.html
+      mode: '0644'
