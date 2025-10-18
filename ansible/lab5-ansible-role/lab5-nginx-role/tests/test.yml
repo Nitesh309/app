@@ -1,0 +1,7 @@
+#SPDX-License-Identifier: MIT-0
+---
+- hosts: webserver
+  remote_user: root
+  become: true
+  roles:
+    - lab5-nginx-role
