@@ -51,7 +51,7 @@ pipeline{
             steps {
                 script {
                     if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
-                        build job: 'april-cd-ec2'
+                        build job: 'cd-deploy'
                     } else {
                         error "Pipeline failed, not triggering downstream job"
                     }
