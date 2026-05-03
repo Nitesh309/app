@@ -8,7 +8,7 @@ pipeline{
         NEXUS_REPOSITORY = 'maven-releases'
         ARTIFACT_GROUP = 'com.example.laundry'
         ARTIFACT_ID = 'LaundryApp'
-        ARTIFACT_VERSION = '2.1.0'
+        ARTIFACT_VERSION = '2.1.1'
         ARTIFACT_FILE = 'maven-app/target/LaundryApp-2.1.0.jar'
         NEXUS_CREDENTIALS = 'nexus'  // Ensure this is set in Jenkins credentials
     }
