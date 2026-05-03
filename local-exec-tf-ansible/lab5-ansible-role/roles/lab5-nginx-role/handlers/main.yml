@@ -1,5 +1,0 @@
-  - name: restart the services nginx using handler 
-    service:
-      name: nginx
-      state: restarted
-    #notify: Restart Nginx
