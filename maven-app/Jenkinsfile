@@ -16,7 +16,7 @@ pipeline{
     stages{
         stage('Stage1-clone-code'){
             steps{
-                git branch: 'main', credentialsId: 'github-april-token', url: 'https://github.com/devopsdecode/april-2025.git'
+                git branch: 'main', credentialsId: 'nitesh', url: 'https://github.com/Nitesh309/app.git'
             }
         }
         stage('BUILD and Package'){
