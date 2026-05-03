@@ -9,7 +9,7 @@ pipeline{
         ARTIFACT_GROUP = 'com.example.laundry'
         ARTIFACT_ID = 'LaundryApp'
         ARTIFACT_VERSION = '2.1.1'
-        ARTIFACT_FILE = 'maven-app/target/LaundryApp-2.1.0.jar'
+        ARTIFACT_FILE = 'maven-app/target/LaundryApp-2.1.1.jar'
         NEXUS_CREDENTIALS = 'nexus'  // Ensure this is set in Jenkins credentials
     }
 
@@ -35,7 +35,7 @@ pipeline{
                             mvn deploy:deploy-file \
                                 -Durl=${NEXUS_URL}/repository/${NEXUS_REPOSITORY}/ \
                                 -DrepositoryId=nexus \
-                                -Dfile=target/LaundryApp-2.1.0.jar \
+                                -Dfile=target/LaundryApp-2.1.1.jar \
                                 -DgroupId=${ARTIFACT_GROUP} \
                                 -DartifactId=${ARTIFACT_ID} \
                                 -Dversion=${ARTIFACT_VERSION} \
